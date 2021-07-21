@@ -27,13 +27,25 @@ class MultiStepLR_Restart(_LRScheduler):
         super(MultiStepLR_Restart, self).__init__(optimizer, last_epoch)
 
     def get_lr(self):
+        
+        
         if self.last_epoch in self.restarts:
+
+            
             if self.clear_state:
                 self.optimizer.state = defaultdict(dict)
+            
+            
             weight = self.restart_weights[self.restarts.index(self.last_epoch)]
+            tmp_var=[group["initial_lr"] for group in self.optimizer.param_groups]
+            for i in range(len(tmp_var)):
+                if tmp_var[i] is None:
+                    tmp_var[i]=tmp_var[0]
+
             return [
-                group["initial_lr"] * weight for group in self.optimizer.param_groups
+                group * weight for group in tmp_var
             ]
+        
         if self.last_epoch not in self.milestones:
             return [group["lr"] for group in self.optimizer.param_groups]
         return [
