@@ -132,14 +132,14 @@ def main():
             tofile=True,
         )
         logger = logging.getLogger("base")
-        logger.info(option.dict2str(opt))
+        print(option.dict2str(opt))
         # tensorboard logger
         if opt["use_tb_logger"] and "debug" not in opt["name"]:
             version = float(torch.__version__[0:3])
             if version >= 1.1:  # PyTorch 1.1
                 from torch.utils.tensorboard import SummaryWriter
             else:
-                logger.info(
+                print(
                     "You are using PyTorch {}. Tensorboard will use [tensorboardX]".format(
                         version
                     )
@@ -174,12 +174,12 @@ def main():
                 train_sampler = None
             train_loader = create_dataloader(train_set, dataset_opt, opt, train_sampler)
             if rank <= 0:
-                logger.info(
+                print(
                     "Number of train images: {:,d}, iters: {:,d}".format(
                         len(train_set), train_size
                     )
                 )
-                logger.info(
+                print(
                     "Total epochs needed: {:d} for iters {:,d}".format(
                         total_epochs, total_iters
                     )
@@ -188,7 +188,7 @@ def main():
             val_set = create_dataset(dataset_opt)
             val_loader = create_dataloader(val_set, dataset_opt, opt, None)
             if rank <= 0:
-                logger.info(
+                print(
                     "Number of val images in [{:s}]: {:d}".format(
                         dataset_opt["name"], len(val_set)
                     )
@@ -203,7 +203,7 @@ def main():
 
     #### resume training
     if resume_state:
-        logger.info(
+        print(
             "Resuming training from epoch: {}, iter: {}.".format(
                 resume_state["epoch"], resume_state["iter"]
             )
@@ -220,9 +220,11 @@ def main():
         scale=opt["scale"], pca_matrix=pca_matrix, cuda=True, **opt["degradation"]
     )
     #### training
-    logger.info(
+    print(
         "Start training from epoch: {:d}, iter: {:d}".format(start_epoch, current_step)
     )
+
+    print("Start Training Model")
     for epoch in range(start_epoch, total_epochs + 1):
         if opt["dist"]:
             train_sampler.set_epoch(epoch)
@@ -254,7 +256,7 @@ def main():
                         if rank <= 0:
                             tb_logger.add_scalar(k, v, current_step)
                 if rank == 0:
-                    logger.info(message)
+                    print(message)
 
             # validation, to produce ker_map_list(fake)
             if current_step % opt["train"]["val_freq"] == 0 and rank <= 0:
@@ -308,7 +310,7 @@ def main():
                 avg_psnr = avg_psnr / idx
 
                 # log
-                logger.info("# Validation # PSNR: {:.6f}".format(avg_psnr))
+                print("# Validation # PSNR: {:.6f}".format(avg_psnr))
                 logger_val = logging.getLogger("val")  # validation logger
                 logger_val.info(
                     "<epoch:{:3d}, iter:{:8,d}, psnr: {:.6f}".format(
@@ -322,14 +324,14 @@ def main():
             #### save models and training states
             if current_step % opt["logger"]["save_checkpoint_freq"] == 0:
                 if rank <= 0:
-                    logger.info("Saving models and training states.")
+                    print("Saving models and training states.")
                     model.save(current_step)
                     model.save_training_state(epoch, current_step)
 
     if rank <= 0:
-        logger.info("Saving the final model.")
+        print("Saving the final model.")
         model.save("latest")
-        logger.info("End of Predictor and Corrector training.")
+        print("End of Predictor and Corrector training.")
     tb_logger.close()
 
 

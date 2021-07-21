@@ -1,0 +1,837 @@
+21-07-21 12:05:48.213 - INFO:   name: DANx2_setting1
+  use_tb_logger: True
+  model: blind
+  distortion: sr
+  scale: 2
+  gpu_ids: [0]
+  pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+  degradation:[
+    random_kernel: True
+    ksize: 21
+    code_length: 10
+    sig_min: 0.2
+    sig_max: 4.0
+    rate_iso: 1.0
+    random_disturb: False
+  ]
+  datasets:[
+    train:[
+      name: DIV2K
+      mode: GT
+      dataroot_GT: /content/Lmdb_data/Bic.lmdb
+      use_shuffle: True
+      n_workers: 8
+      batch_size: 64
+      GT_size: 128
+      LR_size: 64
+      use_flip: True
+      use_rot: True
+      color: RGB
+      phase: train
+      scale: 2
+      data_type: lmdb
+    ]
+    val:[
+      name: DIV2KRK
+      mode: LQGT
+      dataroot_GT: /content/Lmdb_data/Bic.lmdb
+      dataroot_LQ: /content/Lmdb_data/Bic.lmdb
+      phase: val
+      scale: 2
+      data_type: lmdb
+    ]
+  ]
+  network_G:[
+    which_model_G: DAN
+    setting:[
+      nf: 64
+      nb: 40
+      input_para: 10
+      loop: 4
+      kernel_size: 21
+      pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+      upscale: 2
+    ]
+  ]
+  path:[
+    pretrain_model_G: None
+    strict_load: True
+    resume_state: None
+    root: /content/DAN
+    experiments_root: /content/DAN/experiments/DANv1/DANx2_setting1
+    models: /content/DAN/experiments/DANv1/DANx2_setting1/models
+    training_state: /content/DAN/experiments/DANv1/DANx2_setting1/training_state
+    log: /content/DAN/experiments/DANv1/DANx2_setting1
+    val_images: /content/DAN/experiments/DANv1/DANx2_setting1/val_images
+  ]
+  train:[
+    lr_G: 0.0004
+    lr_scheme: MultiStepLR
+    beta1: 0.9
+    beta2: 0.99
+    niter: 400000
+    warmup_iter: -1
+    lr_steps: [200000]
+    lr_gamma: 0.5
+    eta_min: 1e-07
+    pixel_criterion: l1
+    pixel_weight: 1.0
+    manual_seed: 0
+    val_freq: 2500.0
+  ]
+  logger:[
+    print_freq: 20
+    save_checkpoint_freq: 2500.0
+  ]
+  is_train: True
+  dist: False
+
+21-07-21 12:05:49.988 - INFO: Dataset [GTDataset - DIV2K] is created.
+21-07-21 12:05:49.989 - INFO: Number of train images: 100, iters: 2
+21-07-21 12:05:49.989 - INFO: Total epochs needed: 200000 for iters 400,000
+21-07-21 12:05:49.990 - INFO: Dataset [LQGTDataset - DIV2KRK] is created.
+21-07-21 12:05:49.990 - INFO: Number of val images in [DIV2KRK]: 100
+21-07-21 12:05:55.493 - INFO: Network G structure: DataParallel - DAN, with parameters: 4,181,799
+21-07-21 12:05:55.493 - INFO: DAN(
+  (Restorer): Restorer(
+    (head): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (body): Sequential(
+      (0): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (1): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (2): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (3): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (4): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (5): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (6): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (7): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (8): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (9): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (10): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (11): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (12): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (13): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (14): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (15): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (16): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (17): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (18): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (19): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (20): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (21): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (22): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (23): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (24): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (25): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (26): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (27): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (28): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (29): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (30): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (31): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (32): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (33): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (34): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (35): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (36): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (37): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (38): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (39): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(74, 74, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(74, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(64, 4, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+    )
+    (fusion): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (upscale): Sequential(
+      (0): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): PixelShuffle(upscale_factor=2)
+      (2): Conv2d(64, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (Estimator): Estimator(
+    (head_LR): Conv2d(3, 32, kernel_size=(1, 1), stride=(1, 1))
+    (head_HR): Conv2d(3, 32, kernel_size=(9, 9), stride=(2, 2), padding=(4, 4))
+    (body): Sequential(
+      (0): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(32, 2, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (1): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(32, 2, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (2): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(32, 2, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (3): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(32, 2, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+      (4): CRB_Layer(
+        (body): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+          (2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (3): CALayer(
+            (body): Sequential(
+              (0): Conv2d(32, 2, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.2)
+              (2): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+              (3): Sigmoid()
+            )
+            (avg): AdaptiveAvgPool2d(output_size=1)
+          )
+        )
+      )
+    )
+    (out): Conv2d(32, 10, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (globalPooling): AdaptiveAvgPool2d(output_size=(1, 1))
+  )
+)
+21-07-21 12:05:55.497 - INFO: Model [B_Model] is created.
+21-07-21 12:05:55.498 - INFO: Start training from epoch: 0, iter: 0

@@ -13,8 +13,8 @@ except ImportError:
 
 def generate_mod_LR_bic():
     # set parameters
-    up_scale = 4
-    mod_scale = 4
+    up_scale = 2
+    mod_scale = 2
     # set data dir
     sourcedir = "/content/data/"
     savedir = "/content/data_pro"
