@@ -12,12 +12,14 @@ try:
 except ImportError:
     pass
 
+get_ind=int(sys.argv[1])
 # configurations
 # img_folder = '/data/DIV2K/DIV2K_train/LR/x4/*'  # glob matching pattern
-img_folder = "/data/rolf48/blurry/*"
+names=["Bic","HR","LR","LRblur"]
+img_folder = "/content/data_pro/{}/x4/*".format(names[get_ind])
 # lmdb_save_path = '/data/DIV2K/DIV2K_train_LR_sub.lmdb'
-lmdb_save_path = "/data/rolf48/blurry.lmdb"
-meta_info = {"name": "rolf48"}
+lmdb_save_path = "/content/Lmdb_data/{}.lmdb".format(names[get_ind])
+meta_info = {"name": names[get_ind]}
 
 mode = (
     2  # 1 for reading all the images to memory and then writing to lmdb (more memory);
