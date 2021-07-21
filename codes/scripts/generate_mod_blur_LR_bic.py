@@ -5,7 +5,7 @@ import numpy as np
 import torch
 
 try:
-    sys.path.append('..')
+    sys.path.append('/content/DAN/codes')
     from data.util import imresize
     import utils as util
 except ImportError:
@@ -22,7 +22,7 @@ def generate_mod_LR_bic():
     # load PCA matrix of enough kernel
     print("load PCA matrix")
     pca_matrix = torch.load(
-        "../../pca_matrix.pth", map_location=lambda storage, loc: storage
+        "/content/DAN/pca_matrix/DANv1/pca_matrix.pth", map_location=lambda storage, loc: storage
     )
     print("PCA matrix shape: {}".format(pca_matrix.shape))
 
@@ -33,7 +33,7 @@ def generate_mod_LR_bic():
         "pca_matrix": pca_matrix,
         "scale": up_scale,
         "cuda": True,
-        "rate_iso", 1.0
+        "rate_iso": 1.0,
     }
 
     # set random seed
