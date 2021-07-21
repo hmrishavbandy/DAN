@@ -232,6 +232,7 @@ class B_Model(BaseModel):
         if load_path_G is not None:
             logger.info("Loading model for G [{:s}] ...".format(load_path_G))
             self.load_network(load_path_G, self.netG, self.opt["path"]["strict_load"])
-
+    def ret_model(self):
+        return self.netG
     def save(self, iter_label):
         self.save_network(self.netG, "G", iter_label)
