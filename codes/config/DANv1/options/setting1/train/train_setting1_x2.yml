@@ -22,7 +22,7 @@ datasets:
     name: DIV2K
     mode: GT
     #dataroot_GT: /data/DIV2K_Flickr2K/x2HR.lmdb
-    dataroot_GT: /content/Lmdb_data/Bic.lmdb
+    dataroot_GT: /content/Lmdb_data/HR.lmdb
     use_shuffle: true
     n_workers: 2  # per GPU
     batch_size: 4

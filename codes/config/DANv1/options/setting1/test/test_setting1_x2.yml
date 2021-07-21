@@ -5,14 +5,14 @@ distortion: sr
 scale: 2
 crop_border: ~  # crop border when evaluation. If None(~), crop the scale pixels
 gpu_ids: [0]
-pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+pca_matrix_path: /content/DAN/pca_matrix/DANv1/pca_matrix.pth
 
 
 datasets:
   test1:
     name: S
     mode: LQGT
-    dataroot_GT: /content/Lmdb_data/Bic.lmdb
+    dataroot_GT: /content/Lmdb_data/HR.lmdb
     dataroot_LQ: /content/Lmdb_data/LRblur.lmdb
     
 #/data/Set5/x2LRblur.lmdb
