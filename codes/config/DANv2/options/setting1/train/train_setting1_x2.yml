@@ -4,8 +4,8 @@ use_tb_logger: true
 model: blind
 distortion: sr
 scale: 2
-gpu_ids: [0, 1, 2, 3, 4, 5, 6, 7]
-pca_matrix_path: ../../../pca_matrix/DANv2/pca_matrix.pth
+gpu_ids: [0]
+pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
 
 degradation:
   random_kernel: True
@@ -21,11 +21,11 @@ datasets:
   train:
     name: DIV2K
     mode: GT
-    dataroot_GT: /data/DIV2K_Flickr2K/x2HR.lmdb
-
+    #dataroot_GT: /data/DIV2K_Flickr2K/x2HR.lmdb
+    dataroot_GT: /content/Lmdb_data/HR.lmdb
     use_shuffle: true
-    n_workers: 8  # per GPU
-    batch_size: 64
+    n_workers: 2  # per GPU
+    batch_size: 4
     GT_size: 128
     LR_size: 64
     use_flip: true
@@ -34,8 +34,11 @@ datasets:
   val:
     name: DIV2KRK
     mode: LQGT
-    dataroot_GT: /data/Set5/x2HRblur.lmdb
-    dataroot_LQ: /data/Set5/x2LRblur.lmdb
+    #dataroot_GT: /data/Set5/x2HRblur.lmdb
+    #dataroot_LQ: /data/Set5/x2LRblur.lmdb
+    dataroot_GT: /content/Lmdb_data/Bic.lmdb
+    dataroot_LQ: /content/Lmdb_data/Bic.lmdb
+
 
 #### network structures
 network_G:
@@ -60,9 +63,9 @@ train:
   lr_scheme: MultiStepLR
   beta1: 0.9
   beta2: 0.99
-  niter: 800000
+  niter: 400000
   warmup_iter: -1  # no warm up
-  lr_steps: [200000, 400000, 600000]
+  lr_steps: [200000]
   lr_gamma: 0.5
   eta_min: !!float 1e-7
 
@@ -74,5 +77,5 @@ train:
 
 #### logger
 logger:
-  print_freq: 20
+  print_freq: 1
   save_checkpoint_freq: !!float 2.5e3
