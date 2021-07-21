@@ -1,0 +1,78 @@
+21-07-21 14:31:43.483 - INFO:   name: DANx2_setting1
+  suffix: None
+  model: blind
+  distortion: sr
+  scale: 2
+  crop_border: None
+  gpu_ids: [0]
+  pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+  datasets:[
+    test1:[
+      name: S
+      mode: LQGT
+      dataroot_GT: /content/Lmdb_data/Bic.lmdb
+      dataroot_LQ: /content/Lmdb_data/LRBlur.lmdb
+      phase: test1
+      scale: 2
+      data_type: lmdb
+    ]
+  ]
+  network_G:[
+    which_model_G: DAN
+    setting:[
+      nf: 64
+      nb: 40
+      input_para: 10
+      loop: 4
+      kernel_size: 21
+      pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+      upscale: 2
+    ]
+  ]
+  path:[
+    pretrain_model_G: /content/DAN/experiments/DANv1/DANx2_setting1/models/latest_G.pth
+    root: /content/DAN
+    results_root: /content/DAN/results/DANv1/DANx2_setting1
+    log: /content/DAN/results/DANv1/DANx2_setting1
+  ]
+  is_train: False
+
+21-07-21 14:32:05.491 - INFO:   name: DANx2_setting1
+  suffix: None
+  model: blind
+  distortion: sr
+  scale: 2
+  crop_border: None
+  gpu_ids: [0]
+  pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+  datasets:[
+    test1:[
+      name: S
+      mode: LQGT
+      dataroot_GT: /content/Lmdb_data/Bic.lmdb
+      dataroot_LQ: /content/Lmdb_data/LRblur.lmdb
+      phase: test1
+      scale: 2
+      data_type: lmdb
+    ]
+  ]
+  network_G:[
+    which_model_G: DAN
+    setting:[
+      nf: 64
+      nb: 40
+      input_para: 10
+      loop: 4
+      kernel_size: 21
+      pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+      upscale: 2
+    ]
+  ]
+  path:[
+    pretrain_model_G: /content/DAN/experiments/DANv1/DANx2_setting1/models/latest_G.pth
+    root: /content/DAN
+    results_root: /content/DAN/results/DANv1/DANx2_setting1
+    log: /content/DAN/results/DANv1/DANx2_setting1
+  ]
+  is_train: False
+
