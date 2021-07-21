@@ -16,8 +16,8 @@ def generate_mod_LR_bic():
     up_scale = 4
     mod_scale = 4
     # set data dir
-    sourcedir = "/data/Set5/source/"
-    savedir = "/data/Set5/"
+    sourcedir = "/content/data/"
+    savedir = "/content/data_pro"
 
     # load PCA matrix of enough kernel
     print("load PCA matrix")
