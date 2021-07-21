@@ -5,7 +5,7 @@ model: blind
 distortion: sr
 scale: 2
 gpu_ids: [0]
-pca_matrix_path: ../../../pca_matrix/DANv1/pca_matrix.pth
+pca_matrix_path: ../../../pca_matrix/DANv2/pca_matrix.pth
 
 degradation:
   random_kernel: True
@@ -63,9 +63,9 @@ train:
   lr_scheme: MultiStepLR
   beta1: 0.9
   beta2: 0.99
-  niter: 400000
+  niter: 800000
   warmup_iter: -1  # no warm up
-  lr_steps: [200000]
+  lr_steps: [200000,400000,600000]
   lr_gamma: 0.5
   eta_min: !!float 1e-7
 
