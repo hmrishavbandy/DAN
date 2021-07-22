@@ -9,18 +9,19 @@ from utils import PCAEncoder
 
 
 class conv_ds(nn.Module):
-    def __init__(self, in_channels, out_channels,kernel_size,stride,padding,bias=False):
+    def __init__(self, in_channels, out_channels,kernel_size,stride,padding,bias=True):
         super(conv_ds, self).__init__()
         self.conv=nn.Sequential(
-            nn.Conv2d(in_channels, in_channels, kernel_size=1,stride=1,padding=0),
-            nn.BatchNorm2d(in_channels),
-            nn.ReLU6(),
+            # nn.Conv2d(in_channels, in_channels, kernel_size=1,stride=1,padding=0),
+            # nn.BatchNorm2d(in_channels),
+            # nn.ReLU6(),
             nn.Conv2d(in_channels, in_channels, kernel_size, stride=stride,padding=padding, groups=in_channels,bias=bias), #d
-            nn.BatchNorm2d(in_channels),
-            nn.ReLU6(),
+            # nn.BatchNorm2d(in_channels),
+            # nn.ReLU6(),
             nn.Conv2d(in_channels, out_channels, kernel_size=1,stride=1,padding=0), #p
-            nn.BatchNorm2d(out_channels),            
+            # nn.BatchNorm2d(out_channels),            
         )
+        # self.conv=nn.Conv2d(in_channels=in_channels,out_channels=out_channels,kernel_size=kernel_size,stride=stride,padding=padding,bias=bias)
         
 
     def forward(self, x):
