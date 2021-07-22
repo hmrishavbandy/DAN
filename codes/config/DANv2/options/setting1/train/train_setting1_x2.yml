@@ -5,7 +5,7 @@ model: blind
 distortion: sr
 scale: 2
 gpu_ids: [0]
-pca_matrix_path: ../../../pca_matrix/DANv2/pca_matrix.pth
+pca_matrix_path: /root/hmrishav/DAN/pca_matrix/DANv2/pca_matrix.pth
 
 degradation:
   random_kernel: True
@@ -22,10 +22,10 @@ datasets:
     name: DIV2K
     mode: GT
     #dataroot_GT: /data/DIV2K_Flickr2K/x2HR.lmdb
-    dataroot_GT: /content/Lmdb_data/HR.lmdb
+    dataroot_GT: /root/hmrishav/Lmdb_data/HR.lmdb
     use_shuffle: true
-    n_workers: 2  # per GPU
-    batch_size: 4
+    n_workers: 8  # per GPU
+    batch_size: 3
     GT_size: 128
     LR_size: 64
     use_flip: true
@@ -36,8 +36,8 @@ datasets:
     mode: LQGT
     #dataroot_GT: /data/Set5/x2HRblur.lmdb
     #dataroot_LQ: /data/Set5/x2LRblur.lmdb
-    dataroot_GT: /content/Lmdb_data/Bic.lmdb
-    dataroot_LQ: /content/Lmdb_data/Bic.lmdb
+    dataroot_GT: /root/hmrishav/Lmdb_data/HR.lmdb
+    dataroot_LQ: /root/hmrishav/Lmdb_data/HR.lmdb
 
 
 #### network structures

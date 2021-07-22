@@ -5,15 +5,15 @@ distortion: sr
 scale: 2
 crop_border: ~  # crop border when evaluation. If None(~), crop the scale pixels
 gpu_ids: [0]
-pca_matrix_path: /content/DAN/pca_matrix/DANv1/pca_matrix.pth
+pca_matrix_path: /root/hmrishav/DAN/pca_matrix/DANv1/pca_matrix.pth
 
 
 datasets:
   test1:
     name: S
     mode: LQGT
-    dataroot_GT: /content/Lmdb_data/HR.lmdb
-    dataroot_LQ: /content/Lmdb_data/LRblur.lmdb
+    dataroot_GT: /root/hmrishav/Lmdb_data/HR.lmdb
+    dataroot_LQ: /root/hmrishav/Lmdb_data/LR.lmdb
     
 #/data/Set5/x2LRblur.lmdb
 #   test2:
@@ -50,5 +50,5 @@ network_G:
 
 #### path
 path:
-  pretrain_model_G: /content/DAN/experiments/DANv2/DANx2_setting1/models/latest_G.pth
+  pretrain_model_G: /root/hmrishav/DAN/experiments/DANv2/DANx2_setting1/models/latest_G.pth
   #../../../checkpoints/DANv1/danv1_x2_setting1.pth

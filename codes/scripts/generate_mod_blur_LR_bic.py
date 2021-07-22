@@ -4,11 +4,15 @@ import cv2
 import numpy as np
 import torch
 
+sys.path.append('/root/hmrishav/DAN/codes/')
+from data.util import imresize
+import utils as util
 try:
-    sys.path.append('/content/DAN/codes')
+    #sys.path.append('/root/hmrishav/DAN/codes/')
     from data.util import imresize
     import utils as util
 except ImportError:
+    print("Import errors")
     pass
 
 def generate_mod_LR_bic():
@@ -16,13 +20,13 @@ def generate_mod_LR_bic():
     up_scale = 2
     mod_scale = 2
     # set data dir
-    sourcedir = "/content/data/"
-    savedir = "/content/data_pro"
+    sourcedir = "/root/hmrishav/data/"
+    savedir = "/root/hmrishav/data_pro"
 
     # load PCA matrix of enough kernel
     print("load PCA matrix")
     pca_matrix = torch.load(
-        "/content/DAN/pca_matrix/DANv1/pca_matrix.pth", map_location=lambda storage, loc: storage
+        "/root/hmrishav/DAN/pca_matrix/DANv1/pca_matrix.pth", map_location=lambda storage, loc: storage
     )
     print("PCA matrix shape: {}".format(pca_matrix.shape))
 

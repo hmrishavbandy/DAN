@@ -16,9 +16,10 @@ get_ind=int(sys.argv[1])
 # configurations
 # img_folder = '/data/DIV2K/DIV2K_train/LR/x4/*'  # glob matching pattern
 names=["Bic","HR","LR","LRblur"]
-img_folder = "/content/data_pro/{}/x2/*".format(names[get_ind])
+img_folder = "/root/hmrishav/data_pro/{}/x2/*".format(names[get_ind])
 # lmdb_save_path = '/data/DIV2K/DIV2K_train_LR_sub.lmdb'
-lmdb_save_path = "/content/Lmdb_data/{}.lmdb".format(names[get_ind])
+lmdb_save_path = "/root/hmrishav/Lmdb_data/{}.lmdb".format(names[get_ind])
+
 meta_info = {"name": names[get_ind]}
 
 mode = (
