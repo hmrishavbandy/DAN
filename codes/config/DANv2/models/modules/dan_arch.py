@@ -5,12 +5,31 @@ import torch.nn.functional as F
 from utils import PCAEncoder
 
 
+
+
+def conv2d_bn_relu6(in_channels, out_channels, kernel_size=3, stride=2, dropout_prob=0.0):
+    # To preserve the equation of padding. (k=1 maps to pad 0, k=3 maps to pad 1, k=5 maps to pad 2, etc.)
+    padding = (kernel_size + 1) // 2 - 1
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding, bias=False),
+        nn.BatchNorm2d(out_channels),
+        nn.Dropout2d(dropout_prob, inplace=True),
+        nn.ReLU6(inplace=True)
+    )
+
+
 class conv_ds(nn.Module):
     def __init__(self, in_channels, out_channels,kernel_size,stride,padding,bias=False):
         super(conv_ds, self).__init__()
         self.conv=nn.Sequential(
+            nn.Conv2d(in_channels, in_channels, kernel_size=1,stride=1,padding=0),
+            nn.BatchNorm2d(in_channels),
+            nn.ReLU6()
             nn.Conv2d(in_channels, in_channels, kernel_size, stride=stride,padding=padding, groups=in_channels,bias=bias), #d
+            nn.BatchNorm2d(in_channels),
+            nn.ReLU6()
             nn.Conv2d(in_channels, out_channels, kernel_size=1,stride=1,padding=0), #p
+            nn.BatchNorm2d(out_channels),            
         )
         
 
