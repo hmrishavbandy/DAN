@@ -5,20 +5,32 @@ import torch.nn.functional as F
 from utils import PCAEncoder
 
 
+class conv_ds(nn.Module):
+    def __init__(self, in_channels, out_channels,kernel_size,stride,padding,bias=False):
+        super(conv_ds, self).__init__()
+        self.conv=nn.Sequential(
+            nn.Conv2d(in_channels, in_channels, kernel_size, stride=stride,padding=padding, groups=in_channels,bias=bias), #d
+            nn.Conv2d(in_channels, out_channels, kernel_size=1,stride=1,padding=0), #p
+        )
+        
+
+    def forward(self, x):
+        return self.conv(x)
+
 class DPCB(nn.Module):
     def __init__(self, nf1, nf2, ksize1=3, ksize2=1):
         super().__init__()
-
+        
         self.body1 = nn.Sequential(
-            nn.Conv2d(nf1, nf1, ksize1, 1, ksize1 // 2),
+            conv_ds(nf1, nf1, ksize1, 1, ksize1 // 2),
             nn.LeakyReLU(0.2, True),
-            nn.Conv2d(nf1, nf1, ksize1, 1, ksize1 // 2),
+            conv_ds(nf1, nf1, ksize1, 1, ksize1 // 2),
         )
 
         self.body2 = nn.Sequential(
-            nn.Conv2d(nf2, nf1, ksize2, 1, ksize2 // 2),
+            conv_ds(nf2, nf1, ksize2, 1, ksize2 // 2),
             nn.LeakyReLU(0.2, True),
-            nn.Conv2d(nf1, nf1, ksize2, 1, ksize2 // 2),
+            conv_ds(nf1, nf1, ksize2, 1, ksize2 // 2),
         )
 
     def forward(self, x):
@@ -91,19 +103,19 @@ class Estimator(nn.Module):
 
         self.head_LR = nn.Sequential(
             # CenterCrop(self.ksize + scale),
-            nn.Conv2d(in_nc, nf // 2, 5, 1, 2)
+            conv_ds(in_nc, nf // 2, 5, 1, 2)
         )
         self.head_HR = nn.Sequential(
             # CenterCrop(self.ksize + scale),
-            nn.Conv2d(in_nc, nf // 2, scale * 4 + 1, scale, scale * 2),
+            conv_ds(in_nc, nf // 2, scale * 4 + 1, scale, scale * 2),
         )
 
         self.body = DPCG(nf // 2, nf // 2, 3, 3, num_blocks)
 
         self.tail = nn.Sequential(
-            nn.Conv2d(nf // 2, nf, 3, 1, 1),
+            conv_ds(nf // 2, nf, 3, 1, 1),
             nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(nf, self.ksize ** 2, 1, 1, 0),
+            conv_ds(nf, self.ksize ** 2, 1, 1, 0),
             nn.Softmax(1),
         )
 
@@ -130,17 +142,17 @@ class Restorer(nn.Module):
 
         out_nc = in_nc
 
-        self.head1 = nn.Conv2d(in_nc, nf, 3, stride=1, padding=1)
-        self.head2 = nn.Conv2d(input_para, nf, 1, 1, 0)
+        self.head1 = conv_ds(in_nc, nf, 3, stride=1, padding=1)
+        self.head2 = conv_ds(input_para, nf, 1, 1, 0)
 
         body = [DPCG(nf, nf, 3, 1, nb) for _ in range(ng)]
         self.body = nn.Sequential(*body)
 
-        self.fusion = nn.Conv2d(nf, nf, 3, 1, 1)
+        self.fusion = conv_ds(nf, nf, 3, 1, 1)
 
         if scale == 4:  # x4
             self.upscale = nn.Sequential(
-                nn.Conv2d(
+                conv_ds(
                     in_channels=nf,
                     out_channels=nf * scale,
                     kernel_size=3,
@@ -149,7 +161,7 @@ class Restorer(nn.Module):
                     bias=True,
                 ),
                 nn.PixelShuffle(scale // 2),
-                nn.Conv2d(
+                conv_ds(
                     in_channels=nf,
                     out_channels=nf * scale,
                     kernel_size=3,
@@ -158,14 +170,14 @@ class Restorer(nn.Module):
                     bias=True,
                 ),
                 nn.PixelShuffle(scale // 2),
-                nn.Conv2d(nf, out_nc, 3, 1, 1),
+                conv_ds(nf, out_nc, 3, 1, 1),
             )
         elif scale == 1:
-            self.upscale = nn.Conv2d(nf, out_nc, 3, 1, 1)
+            self.upscale = conv_ds(nf, out_nc, 3, 1, 1)
 
         else:  # x2, x3
             self.upscale = nn.Sequential(
-                nn.Conv2d(
+                conv_ds(
                     in_channels=nf,
                     out_channels=nf * scale ** 2,
                     kernel_size=3,
@@ -174,7 +186,7 @@ class Restorer(nn.Module):
                     bias=True,
                 ),
                 nn.PixelShuffle(scale),
-                nn.Conv2d(nf, out_nc, 3, 1, 1),
+                conv_ds(nf, out_nc, 3, 1, 1),
             )
 
     def forward(self, input, ker_code):
