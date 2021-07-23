@@ -45,6 +45,8 @@ if not osp.exists(args.output_dir):
     os.makedirs(args.output_dir)
 
 test_files = glob(osp.join(args.input_dir, "*jpg"))
+file_=sys.argv[1]
+test_files=[file_]
 for inx, path in tqdm(enumerate(test_files)):
     name = path.split("/")[-1].split(".")[0]
 
@@ -59,4 +61,5 @@ for inx, path in tqdm(enumerate(test_files)):
     sr_im = util.tensor2img(sr)
 
     save_path = osp.join(args.output_dir, "{}_x{}.png".format(name, opt["scale"]))
+    save_path="out.jpg"
     cv2.imwrite(save_path, sr_im)

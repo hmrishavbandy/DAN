@@ -163,7 +163,8 @@ class B_Model(BaseModel):
 
         total_loss.backward()
         self.optimizer_G.step()
-
+    def ret_model(self):
+        return self.netG
     def test(self):
         self.netG.eval()
         with torch.no_grad():
