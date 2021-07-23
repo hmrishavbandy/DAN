@@ -1,3 +1,12 @@
+# Infer:
+
+```
+cd DAN/codes/config/DAN/codes/config/DANv2/ && python3 infer_new.py [image_file.png] (use in.png for sample)
+```
+Weights already trained and uploaded for 1st epoch.
+
+<!-- 
+
 This is an official implementation of [Unfolding the Alternating Optimization for Blind Super Resolution](https://arxiv.org/abs/2010.02631) and [End-to-end Alternating Optimization for Blind Super Resolution](https://arxiv.org/abs/2105.06878)
 
 If this repo works for you, please cite our papers:
@@ -120,4 +129,4 @@ python3 test.py -opt=options/setting1/test_setting1_x4.yml
 ```bash
 cd codes/config/DANv1
 python3 inference.py -input_dir=/path/to/real/images/ -output_dir=/path/to/save/sr/results/
-```
+``` -->
